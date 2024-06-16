@@ -3,6 +3,7 @@ package com.qinshou.webrtcdemo_android;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -27,6 +28,7 @@ import org.webrtc.PeerConnection;
 import org.webrtc.PeerConnectionFactory;
 import org.webrtc.RtpReceiver;
 import org.webrtc.SessionDescription;
+import org.webrtc.SoftwareVideoDecoderFactory;
 import org.webrtc.SurfaceTextureHelper;
 import org.webrtc.SurfaceViewRenderer;
 import org.webrtc.VideoCapturer;
@@ -211,7 +213,10 @@ public class P2PDemoActivity extends AppCompatActivity {
 
     private PeerConnectionFactory createPeerConnectionFactory(EglBase eglBase) {
         VideoEncoderFactory videoEncoderFactory = new DefaultVideoEncoderFactory(eglBase.getEglBaseContext(), true, true);
-        VideoDecoderFactory videoDecoderFactory = new DefaultVideoDecoderFactory(eglBase.getEglBaseContext());
+        VideoDecoderFactory videoDecoderFactory = new SoftwareVideoDecoderFactory();
+        for (int i = 0; i < videoDecoderFactory.getSupportedCodecs().length; i++) {
+            Log.d("Codecs", "Supported codecs: " + videoDecoderFactory.getSupportedCodecs()[i].name);
+        }
         return PeerConnectionFactory.builder().setVideoEncoderFactory(videoEncoderFactory).setVideoDecoderFactory(videoDecoderFactory).createPeerConnectionFactory();
     }
 
